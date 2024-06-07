@@ -12,11 +12,11 @@ export function getUUID () {
 }
 
 /**
- * 是否有权限
+ * 是否有权限   目前没做权限管理，默认都有权限
  * @param {*} key
  */
 export function isAuth (key) {
-  return JSON.parse(sessionStorage.getItem('permissions') || '[]').indexOf(key) !== -1 || false
+  return JSON.parse(sessionStorage.getItem('permissions') || '[]').indexOf(key) !== -1 || true
 }
 
 /**
