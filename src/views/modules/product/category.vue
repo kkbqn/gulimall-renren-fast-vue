@@ -1,6 +1,10 @@
 <template>
   <div>
-    <el-switch v-model="draggable" active-text="开启拖拽" inactive-text="关闭拖拽"></el-switch>
+    <el-switch
+      v-model="draggable"
+      active-text="开启拖拽"
+      inactive-text="关闭拖拽"
+    ></el-switch>
     <el-button v-if="draggable" @click="batchSave">批量保存</el-button>
     <el-button type="danger" @click="batchDelete">批量删除</el-button>
     <el-tree
@@ -19,18 +23,22 @@
         <span>{{ node.label }}</span>
         <span>
           <el-button
-            v-if="node.level <=2"
+            v-if="node.level <= 2"
             type="text"
             size="mini"
             @click="() => append(data)"
-          >Append</el-button>
-          <el-button type="text" size="mini" @click="edit(data)">edit</el-button>
+            >Append</el-button
+          >
+          <el-button type="text" size="mini" @click="edit(data)"
+            >edit</el-button
+          >
           <el-button
-            v-if="node.childNodes.length==0"
+            v-if="node.childNodes.length == 0"
             type="text"
             size="mini"
             @click="() => remove(node, data)"
-          >Delete</el-button>
+            >Delete</el-button
+          >
         </span>
       </span>
     </el-tree>
@@ -49,7 +57,10 @@
           <el-input v-model="category.icon" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="计量单位">
-          <el-input v-model="category.productUnit" autocomplete="off"></el-input>
+          <el-input
+            v-model="category.productUnit"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -92,7 +103,7 @@ export default {
       defaultProps: {
         children: "children",
         label: "name"
-      }
+      },
     };
   },
 
@@ -127,13 +138,21 @@ export default {
           this.$http({
             url: this.$http.adornUrl("/product/category/delete"),
             method: "post",
-            data: this.$http.adornData(catIds, false)
+            data: this.$http.adornData(catIds, false),
           }).then(({ data }) => {
-            this.$message({
-              message: "菜单批量删除成功",
-              type: "success"
-            });
-            this.getMenus();
+            console.log("删除结果", data);
+            if (data.code == 0) {
+              this.$message({
+                message: "菜单批量删除成功",
+                type: "success",
+              });
+              this.getMenus();
+            } else {
+              this.$message({
+                message: "菜单批量删除失败",
+                type: "error",
+              });
+            }
           });
         })
         .catch(() => {});
@@ -142,7 +161,7 @@ export default {
       this.$http({
         url: this.$http.adornUrl("/product/category/update/sort"),
         method: "post",
-        data: this.$http.adornData(this.updateNodes, false)
+        data: this.$http.adornData(this.updateNodes, false),
       }).then(({ data }) => {
         this.$message({
           message: "菜单顺序等修改成功",
@@ -347,12 +366,21 @@ export default {
           this.$http({
             url: this.$http.adornUrl("/product/category/delete"),
             method: "post",
-            data: this.$http.adornData(ids, false)
+            data: this.$http.adornData(ids, false),
           }).then(({ data }) => {
-            this.$message({
-              message: "菜单删除成功",
-              type: "success"
-            });
+            console.log("删除结果", data);
+            if (data.code == 0) {
+              this.$message({
+                message: "菜单删除成功",
+                type: "success",
+              });
+              this.getMenus();
+            } else {
+              this.$message({
+                message: "菜单删除失败",
+                type: "error"
+              });
+            }
             //刷新出新的菜单
             this.getMenus();
             //设置需要默认展开的菜单
@@ -376,7 +404,7 @@ export default {
   updated() {}, //生命周期 - 更新之后
   beforeDestroy() {}, //生命周期 - 销毁之前
   destroyed() {}, //生命周期 - 销毁完成
-  activated() {} //如果页面有keep-alive缓存功能，这个函数会触发
+  activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 };
 </script>
 <style scoped>
